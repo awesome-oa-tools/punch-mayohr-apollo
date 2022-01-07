@@ -1,0 +1,64 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const logger = require('node-color-log');
+logger.setDate(() => (new Date()).toLocaleTimeString());
+
+
+let screenshotDir;
+const cwd = `${require('os').homedir()}/.punch-mayohr-apollo`;
+
+try {
+  if (fs.existsSync('.env')) {
+    require('dotenv').config()
+  } else {
+    require('dotenv').config({path: `${cwd}/.env`})
+  }
+} catch (err) {
+  require('dotenv').config({path: `${cwd}/.env`})
+}
+try {
+  if (fs.existsSync('./screenshots')) {
+    screenshotDir = './screenshots'
+  } else {
+    screenshotDir = `${cwd}/screenshots`
+  }
+} catch (err) {
+  screenshotDir = `${cwd}/screenshots`
+}
+
+const punch = require('../index');
+
+(async () => {
+  const companyCode = process.env.COMPANY_CODE;
+  const employeeNo = process.env.EMPLOYEE_NO;
+  const password = process.env.PASSWORD;
+  const headless = process.env.HEADLESS === "true";
+  const screenshot = {
+    enabled: process.env.SCREENSHOT === "true",
+    dir: screenshotDir
+  }
+  const log = {
+    level: process.env.LOG_LEVEL,
+    color: process.env.LOG_COLOR === "true"
+  }
+  const telegram = {
+    token: process.env.TG_TOKEN,
+    chanel: process.env.TG_CHANEL
+  }
+
+  if (!companyCode) {
+    logger.warn("mayohr apollo account not found!");
+    logger.info("Please Visit: https://github.com/awesome-oa-tools/punch-mayohr-apollo#command-line");
+    return;
+  }
+
+  punch(
+    companyCode,
+    employeeNo,
+    password,
+    headless,
+    screenshot,
+    log,
+    telegram
+  );
+})();

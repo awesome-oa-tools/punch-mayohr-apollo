@@ -1,0 +1,21 @@
+{
+  "name": "punch-mayohr-apollo",
+  "version": "0.0.25",
+  "description": "",
+  "main": "index.js",
+  "bin": ".bin/punch-mayohr-apollo",
+  "scripts": {
+    "start": ".bin/punch-mayohr-apollo"
+  },
+  "homepage": "https://github.com/awesome-oa-tools/punch-mayohr-apollo",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "moment": "^2.29.1",
+    "node-color-log": "^7.0.0",
+    "pm2": "^5.1.2",
+    "puppeteer": "^13.0.1",
+    "request": "^2.88.2"
+  }
+}
