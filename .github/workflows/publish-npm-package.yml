@@ -1,0 +1,43 @@
+name: Release Npm Package
+
+on:
+  push:
+    branches: [ "main" ]
+    paths-ignore:
+      - 'node_modules/**'
+      - '.env'
+
+jobs:
+  publish-npm-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Git config
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+
+      - name: Setup NodeJs
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm install -g \
+            release-it \
+            @release-it/conventional-changelog
+          git remote rm origin
+          git remote add origin https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/croinplus-blockchain-wallet/blockchain-wallet.git
+          git fetch -p
+          git symbolic-ref HEAD refs/heads/main
+          git branch --set-upstream-to=origin/main main
+          npm run release
