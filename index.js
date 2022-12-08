@@ -61,8 +61,8 @@ module.exports = async function (
 
   // 按下 上班/下班 按鈕
   logger.info("click punch button");
-  await page.waitForSelector('button.ta_btn_cancel');
-  await page.click('button.ta_btn_cancel');
+  await page.waitForSelector('button.punch-window-button-work');
+  await page.click('button.punch-window-button-work');
 
   // 覆蓋上一次紀錄
   if ((await page.$('button.ta_btn')) !== null) {
@@ -89,7 +89,7 @@ module.exports = async function (
   // screenshot
   if (screenshot && screenshot.enabled) {
     if (!fs.existsSync(screenshot.dir)){
-      fs.mkdirSync(screenshot.dir);
+      fs.mkdirSync(screenshot.dir, {recursive: true});
     }
     const filename = moment().format('YYYY-MM-DD-HH-mm-ss');
     await sleep(2, 3);
